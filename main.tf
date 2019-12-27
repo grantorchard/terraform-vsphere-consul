@@ -42,10 +42,8 @@ resource vsphere_virtual_machine "this" {
   }
 }
 
-/*
 resource vsphere_compute_cluster_vm_anti_affinity_rule "this" {
   name                = var.drs_group_name
   compute_cluster_id  = data.vsphere_compute_cluster.this.id
   virtual_machine_ids = vsphere_virtual_machine.this.*.id
 }
-*/
