@@ -1,0 +1,44 @@
+#cloud-config
+groups:
+  - ${username}: [${username}]
+
+users:
+  - name: ${username}
+    ssh-authorized-keys:
+     - ${ssh_public_key}
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    groups: sudo
+    shell: /bin/bash
+
+packages:
+  - jq
+  - unzip
+
+write_files:
+  - path: /etc/systemd/system/consul.service
+    permissions: '0644'
+    owner: root:root
+    encoding: b64
+    content: ${consul_service}
+
+  - path: ${consul_config_path}
+    permissions: '0644'
+    owner: root:root
+    encoding: b64
+    content: ${consul_config}
+
+  - path: ${consul_bin_dir}/touch
+    permissions: 0644
+    owner: root:root
+    content: directory initialised
+
+  - path: ${consul_data_dir}/touch
+    permissions: 0644
+    owner: root:root
+    content: directory initialised
+
+runcmd:
+  - curl -O https://releases.hashicorp.com/consul/1.6.2/consul_1.6.2_linux_amd64.zip
+  - unzip consul_1.6.2_linux_amd64.zip -d ${consul_bin_dir}
+  - chmod +x ${consul_bin_dir}/consul
+  - systemctl restart consul

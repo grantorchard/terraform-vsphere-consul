@@ -1,0 +1,20 @@
+[Unit]
+Description="HashiCorp Consul - A service mesh solution"
+Documentation=https://www.consul.io/
+Requires=network-online.target
+After=network-online.target
+ConditionFileNotEmpty=${consul_config_path}
+
+[Service]
+Type=notify
+User=root
+Group=root
+ExecStart=${consul_bin_dir}/consul agent -${consul_mode} -config-dir ${consul_config_dir} -data-dir ${consul_data_dir}
+ExecReload=${consul_bin_dir}/consul reload
+KillMode=process
+Restart=on-failure
+TimeoutSec=300s
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

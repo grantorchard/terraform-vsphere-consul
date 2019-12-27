@@ -1,0 +1,21 @@
+{
+    "datacenter": "${consul_datacenter}",
+    "log_level": "${consul_log_level}",
+    "node_name": "${consul_node_name}",
+    "server": true,
+    "bootstrap_expect": ${consul_node_count},
+    "addresses": {
+        %{ if enable_tls == "true" }"https": "${consul_ip_address}"
+        %{ else }"http": "${consul_ip_address}"%{ endif }
+    },
+    "ports": {
+        %{ if enable_tls == "true" }"https": ${consul_https_port}
+        %{ else }"http": ${consul_http_port}%{ endif }
+    },
+    %{ if enable_tls == "true" }"key_file": "${consul_private_key}",
+    "cert_file": "${consul_certificate}",
+    "ca_file": "${consul_caroot}",
+    %{ endif }
+    "retry_join": ${consul_ip_addresses},
+    "ui": ${consul_enable_ui}
+}

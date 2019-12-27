@@ -1,0 +1,13 @@
+network:
+  version: 2
+  ethernets:
+    ens192:
+      dhcp4: false
+      addresses:
+        - ${ip_address}/${netmask}
+      gateway4: ${gateway}
+      nameservers:
+        addresses: [${nameservers}]
+local-hostname: ${hostname}
+instance-id: ${hostname}
+public-keys-data: ${ssh_public_key}
